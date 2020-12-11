@@ -6,9 +6,14 @@
 //
 
 import UIKit
-import Keyboard
 
 public protocol KeyboardNotifiable {
+    
+    /// 键盘 frame
+    var keyboardFrame: CGRect { get set }
+    
+    /// 键盘是否正在显示
+    var isKeyboardShowing: Bool { get }
     
     /// 激活键盘出现/消失的监听，一般用在 viewDidLoad 中即可
     func activatingKeyboardNotifiable()
@@ -26,39 +31,11 @@ public protocol KeyboardNotifiable {
     /// 键盘将要隐藏，实现内容已包含在动画块中
     /// - Parameter targetFrame: 键盘目标 frame
     func keyboardWillHide(_ targetFrame: CGRect)
+    
 }
 
 public extension KeyboardNotifiable {
+    func keyboardWillChangeFrameWithAnimation(_ isVisiable: Bool, _ targetFrame: CGRect) { }
     func keyboardWillShow(_ targetFrame: CGRect) { }
     func keyboardWillHide(_ targetFrame: CGRect) { }
 }
-
-private var __keyboardNotificationTargetKey = "KeyboardNotifiable.__keyboardNotificationTargetKey"
-
-public extension KeyboardNotifiable where Self: UIResponder {
-    
-    private var __keyboardNotificationTarget: KeyboardTarget? {
-        get {
-            objc_getAssociatedObject(self, &__keyboardNotificationTargetKey) as? KeyboardTarget
-        }
-        set {
-            objc_setAssociatedObject(self, &__keyboardNotificationTargetKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-        }
-    }
-    
-    func activatingKeyboardNotifiable() {
-        // active keyboard will change frame notification
-        let _ = KeyboardManager.shared
-        
-        // listen
-        self.__keyboardNotificationTarget = KeyboardTarget.observer(self) { [weak self] (x) in
-            self?.keyboardWillChangeFrame(x)
-        }
-    }
-    
-    private func keyboardWillChangeFrame(_ notify: Notification) {
-        print("keyboard will change frame")
-    }
-    
-}
-
