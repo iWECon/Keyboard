@@ -33,7 +33,7 @@ public class KeyboardTarget: NSObject {
         target.target = observer
         target.using = using
         
-        NotificationCenter.default.addObserver(target, selector: #selector(doObserver), name: UIResponder.keyboardWillChangeFrameNotification, object: object)
+        NotificationCenter.default.addObserver(target, selector: #selector(doObserver(x:)), name: UIResponder.keyboardWillChangeFrameNotification, object: object)
         
         return target
     }
