@@ -9,6 +9,7 @@ import UIKit
 
 public extension Keyboard {
     
+    /// a weak observer, no call required `NotificationCenter.default.removeObserver(self)`
     class Observer: NSObject {
         
         weak var target: AnyObject?

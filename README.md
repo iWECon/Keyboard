@@ -15,7 +15,7 @@ You can use KeyboardObserver to listen keyboard will change frame's notification
 
 // No call required `NotificationCenter.default.removeObserver(self)`
 // when the self deinit, then the observer auto remove.
-KeyboardObserver.observer(self, using: { (notify) in
+Keyboard.Observer(self, using: { (notify) in
     // get info from notify
     guard let userInfo = notify.userInfo else { return }
     
