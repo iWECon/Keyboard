@@ -12,10 +12,9 @@ public class KeyboardManager: NSObject {
     
 }
 
-
 public class KeyboardTarget: NSObject {
     
-    public var target: AnyObject?
+    public weak var target: AnyObject?
     public var using: ((_: Notification) -> Void)?
     
     @objc public func doObserver(x: Notification) {

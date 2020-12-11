@@ -42,7 +42,7 @@ public extension KeyboardNotifiable where Self: UIResponder {
             objc_getAssociatedObject(self, &__keyboardNotificationTargetKey) as? KeyboardTarget
         }
         set {
-            objc_setAssociatedObject(self, &__keyboardNotificationTargetKey, newValue, .OBJC_ASSOCIATION_ASSIGN)
+            objc_setAssociatedObject(self, &__keyboardNotificationTargetKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         }
     }
     
