@@ -69,5 +69,5 @@ class RenameController: UIViewController, KeyboardNotifiable {
 #### Swift Package Manager
 
 ```swift
-.package("https://github.com/iWECon/Keyboard", from: "1.0.0")
+.package("https://github.com/iWECon/Keyboard", from: "2.0.0")
 ```

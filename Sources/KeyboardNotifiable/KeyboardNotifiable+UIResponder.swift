@@ -10,9 +10,9 @@ import Keyboard
 
 private extension KeyboardNotifiable where Self: UIResponder {
     
-    var __keyboardObserver: KeyboardObserver? {
+    var __keyboardObserver: Keyboard.Observer? {
         get {
-            objc_getAssociatedObject(self, &KeyboardKeys.targetKey) as? KeyboardObserver
+            objc_getAssociatedObject(self, &KeyboardKeys.targetKey) as? Keyboard.Observer
         }
         set {
             objc_setAssociatedObject(self, &KeyboardKeys.targetKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
@@ -59,7 +59,7 @@ public extension KeyboardNotifiable where Self: UIResponder {
     }
     
     func activatingKeyboardNotifiable() {
-        self.__keyboardObserver = KeyboardObserver.observer(self, using: { [weak self] (notify) in
+        self.__keyboardObserver = Keyboard.Observer(self, using: { [weak self] (notify) in
             guard var self = self else { return }
             if let keyboardBounds = notify.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect {
                 self.keyboardFrame = keyboardBounds
