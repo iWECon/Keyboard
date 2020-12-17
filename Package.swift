@@ -12,9 +12,15 @@ let package = Package(
         .library(name: "Keyboard", targets: ["Keyboard"]),
         .library(name: "KeyboardNotifiable", targets: ["KeyboardNotifiable"])
     ],
+    dependencies: [
+        .package(name: "WeakObserver", url: "https://github.com/iWECon/WeakObserver", from: "2.0.0"),
+    ],
     targets: [
-        .target(name: "Keyboard", dependencies: []),
-        .target(name: "KeyboardNotifiable", dependencies: ["Keyboard"]),
+        .target(name: "Keyboard", dependencies: ["WeakObserver"]),
+        .target(name: "KeyboardNotifiable", dependencies: ["Keyboard", "WeakObserver"]),
         .testTarget(name: "KeyboardTests", dependencies: ["Keyboard"]),
+    ],
+    swiftLanguageVersions: [
+        .v5
     ]
 )
