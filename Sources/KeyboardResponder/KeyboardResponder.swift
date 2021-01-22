@@ -3,7 +3,6 @@
 //
 
 import UIKit
-import WeakObserver
 
 @propertyWrapper
 public struct KeyboardResponder<T: UIView> {
@@ -14,40 +13,16 @@ public struct KeyboardResponder<T: UIView> {
         set { value = newValue }
     }
     
-    var observer: NotificationWeakObserver?
+    // MARK:- Only read properties
+    public private(set) var keyboardBounds: CGRect = .zero
+    public var projectedValue: KeyboardResponder<T> { self }
+    public let control: Control
     
-    public init(wrappedValue: T) {
+    public init(wrappedValue: T, bottom: CGFloat = -1,
+                transition transitionWhenChange: Bool = true, duration: TimeInterval = 0.24,
+                options: UIView.AnimationOptions = [.allowUserInteraction, .beginFromCurrentState, .curveEaseOut]) {
         self.value = wrappedValue
-        // listen keybaord observer
-        let self_ = self
-        self.observer = NotificationWeakObserver(wrappedValue, name: UIResponder.keyboardWillChangeFrameNotification) { (notify) in
-            guard wrappedValue.superview != nil, wrappedValue.window != nil else { return }
-            self_.__keyboardWillChangeFrame(notify)
-        }
+        self.control = Control(value: wrappedValue, bottom: bottom, transition: transitionWhenChange, duration: duration, options: options)
     }
     
-    func __keyboardWillChangeFrame(_ notify: Notification) {
-        guard let userInfo = notify.userInfo else { return }
-        
-        guard let keyboardBounds = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else { return }
-        guard let duration = userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval else { return }
-        guard let curve = userInfo[UIResponder.keyboardAnimationCurveUserInfoKey] as? Int else { return }
-        UIView.beginAnimations(nil, context: nil)
-        UIView.setAnimationDuration(duration)
-        UIView.setAnimationCurve(UIView.AnimationCurve.init(rawValue: curve)!)
-        UIView.setAnimationBeginsFromCurrentState(true)
-        
-        let isShow = keyboardBounds != .zero && keyboardBounds.origin.y < UIScreen.main.bounds.height
-        if isShow {
-            let maxY = UIScreen.main.bounds.height - keyboardBounds.height
-            if maxY == value.frame.maxY {
-                return
-            }
-            let diff = maxY - value.frame.maxY
-            self.wrappedValue.transform = .init(translationX: 0, y: -diff)
-        } else {
-            self.wrappedValue.transform = .identity
-        }
-        UIView.commitAnimations()
-    }
 }

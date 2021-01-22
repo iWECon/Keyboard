@@ -1,0 +1,16 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "WeakObserver",
+        "repositoryURL": "https://github.com/iWECon/WeakObserver",
+        "state": {
+          "branch": null,
+          "revision": "fe47be9668fe0afbbe903fe903301dc5116e7f54",
+          "version": "2.0.0"
+        }
+      }
+    ]
+  },
+  "version": 1
+}
