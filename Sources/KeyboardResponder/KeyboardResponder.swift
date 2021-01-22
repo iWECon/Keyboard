@@ -8,18 +8,17 @@ import WeakObserver
 @propertyWrapper
 public struct KeyboardResponder<T: UIView> {
     
-    weak var value: T?
-    public var wrappedValue: T? {
+    var value: T
+    public var wrappedValue: T {
         get { value }
         set { value = newValue }
     }
     
     var observer: NotificationWeakObserver?
     
-    public init(wrappedValue: T?) {
-        self.wrappedValue = wrappedValue
+    public init(wrappedValue: T) {
+        self.value = wrappedValue
         // listen keybaord observer
-        guard let wrappedValue = wrappedValue else { return }
         let self_ = self
         self.observer = NotificationWeakObserver(wrappedValue, name: UIResponder.keyboardWillChangeFrameNotification) { (notify) in
             guard wrappedValue.superview != nil, wrappedValue.window != nil else { return }
@@ -40,9 +39,9 @@ public struct KeyboardResponder<T: UIView> {
         
         let isShow = keyboardBounds != .zero && keyboardBounds.origin.y < UIScreen.main.bounds.height
         if isShow {
-            self.wrappedValue?.transform = .init(translationX: 0, y: -keyboardBounds.height)
+            self.wrappedValue.transform = .init(translationX: 0, y: -keyboardBounds.height)
         } else {
-            self.wrappedValue?.transform = .identity
+            self.wrappedValue.transform = .identity
         }
         UIView.commitAnimations()
     }
