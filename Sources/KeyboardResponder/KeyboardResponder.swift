@@ -39,7 +39,12 @@ public struct KeyboardResponder<T: UIView> {
         
         let isShow = keyboardBounds != .zero && keyboardBounds.origin.y < UIScreen.main.bounds.height
         if isShow {
-            self.wrappedValue.transform = .init(translationX: 0, y: -keyboardBounds.height)
+            let maxY = UIScreen.main.bounds.height - keyboardBounds.height
+            if maxY == value.frame.maxY {
+                return
+            }
+            let diff = maxY - value.frame.maxY
+            self.wrappedValue.transform = .init(translationX: 0, y: -diff)
         } else {
             self.wrappedValue.transform = .identity
         }
