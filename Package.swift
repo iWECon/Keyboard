@@ -19,7 +19,7 @@ let package = Package(
     targets: [
         .target(name: "Keyboard", dependencies: ["WeakObserver"]),
         .target(name: "KeyboardNotifiable", dependencies: ["Keyboard", "WeakObserver"]),
-        .target(name: "KeyboardResponder"),
+        .target(name: "KeyboardResponder", dependencies: ["WeakObserver"]),
         .testTarget(name: "KeyboardTests", dependencies: ["Keyboard"]),
     ],
     swiftLanguageVersions: [
