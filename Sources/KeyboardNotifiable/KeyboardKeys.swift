@@ -8,6 +8,6 @@
 import Foundation
 
 struct KeyboardKeys {
-    static var targetKey = "KeyboardKeys.targetKey"
-    static var frameKey = "KeybaordKeys.frameKey"
+    static var targetKey: UInt8 = 0
+    static var frameKey: UInt8 = 1
 }

@@ -26,21 +26,24 @@ private extension KeyboardNotifiable where Self: UIResponder {
         guard let keyboardBounds = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else { return }
         guard let duration = userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval else { return }
         guard let curve = userInfo[UIResponder.keyboardAnimationCurveUserInfoKey] as? Int else { return }
-        UIView.beginAnimations(nil, context: nil)
-        UIView.setAnimationDuration(duration)
-        UIView.setAnimationCurve(UIView.AnimationCurve.init(rawValue: curve)!)
-        UIView.setAnimationBeginsFromCurrentState(true)
         
-        self.keyboardFrame = keyboardBounds
-        keyboardWillChangeFrameWithAnimation(isKeyboardShowing, keyboardBounds)
-        
-        if isKeyboardShowing {
-            keyboardWillShow(keyboardBounds)
-        } else {
-            keyboardWillHide(keyboardBounds)
+        UIView.animate(withDuration: duration, delay: 0, options: [UIView.AnimationOptions(rawValue: UInt(curve)), .beginFromCurrentState]) {
+            self.keyboardFrame = keyboardBounds
+            self.keyboardWillChangeFrameWithAnimation(self.isKeyboardShowing, keyboardBounds)
+            if self.isKeyboardShowing {
+                self.keyboardWillShow(keyboardBounds)
+            } else {
+                self.keyboardWillHide(keyboardBounds)
+            }
+        } completion: { _ in
+            self.keyboardDidChangeFrame(self.isKeyboardShowing, keyboardBounds)
+            
+            if self.isKeyboardShowing {
+                self.keyboardDidShow(keyboardBounds)
+            } else {
+                self.keyboardDidHidden(keyboardBounds)
+            }
         }
-        
-        UIView.commitAnimations()
     }
 }
 
