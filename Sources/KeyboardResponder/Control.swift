@@ -12,27 +12,23 @@ public class Control: NSObject {
     // MARK:- Public properties
     
     /// transition for the frame change, default is true
-    /// 视图的 frame 变化时，重新调整位置是否需要动画过渡
     public private(set) var transitionFrameChange: Bool = true
     
     /// aniamte duration of transition, default is 0.24
-    /// 视图的 frame 变化时，重新调整位置的动画持续时间
     public private(set) var transitionAnimateDuration: TimeInterval = 0.24
     
     /// animate options of transition, default is [.allowUserInteraction, .beginFromCurrentState, .curveEaseOut]
-    /// 视图的 frame 变化时，动画的选项
     public private(set) var transitionAnimateOptions: UIView.AnimationOptions = [.allowUserInteraction, .beginFromCurrentState, .curveEaseOut]
     
-    /// 键盘显示/隐藏
     public var isKeyboardShowing: Bool {
         self.keyboardBounds != .zero && self.keyboardBounds.origin.y < getRsdHeight()
     }
     
     /// bounds of keyboard
-    /// 键盘的 bounds
     public private(set) var keyboardBounds: CGRect = .zero
     
-    /// 是否吸附到键盘上，为false 时，键盘弹起不再调整视图的 frame
+    /// Whether to attach to the keyboard. 
+    /// If false, the keyboard pops up and no longer adjusts the view's frame.
     public var isShouldAdsorption = true
     
     /// 键盘出现/消失时的回执
