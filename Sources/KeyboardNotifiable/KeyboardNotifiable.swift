@@ -9,6 +9,12 @@ import UIKit
 
 public protocol KeyboardNotifiable {
     
+    /// Whether to respond to events when the keyboard pops up or disappears
+    ///
+    /// Default is true, when you set it to `false`,
+    /// it will no longer trigger events such as `keyboardWillChange` / `keyboardDidChange`
+    var isRespondToKeyboard: Bool { get set }
+    
     var keyboardFrame: CGRect { get set }
     
     /// Indicates whether the keyboard displays
