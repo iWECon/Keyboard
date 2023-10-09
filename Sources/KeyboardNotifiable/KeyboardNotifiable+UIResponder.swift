@@ -11,7 +11,7 @@ import WeakObserver
 
 private extension KeyboardNotifiable where Self: UIResponder {
     
-    var __KeyboardNotifiable_KeybaordObserver: NotificationWeakObserver? {
+    var __keyboardNotifiableObserver: NotificationWeakObserver? {
         get {
             objc_getAssociatedObject(self, &KeyboardKeys.targetKey) as? NotificationWeakObserver
         }
@@ -62,11 +62,25 @@ public extension KeyboardNotifiable where Self: UIResponder {
         keyboardFrame != .zero && keyboardFrame.origin.y < UIScreen.main.bounds.height
     }
     
+    var isRespondToKeyboard: Bool {
+        get {
+            if let number = (objc_getAssociatedObject(self, &KeyboardKeys.respond) as? NSNumber) {
+                return number.boolValue
+            }
+            return true
+        }
+        set {
+            objc_setAssociatedObject(self, &KeyboardKeys.respond, NSNumber(booleanLiteral: newValue), .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        }
+    }
+    
     func activatingKeyboardNotifiable() {
         let _ = Keyboard.shared
         
-        self.__KeyboardNotifiable_KeybaordObserver = NotificationWeakObserver(self, name: Keyboard.WillChangeFrameNotification, object: nil, using: { [weak self] (notify) in
+        self.__keyboardNotifiableObserver = NotificationWeakObserver(self, name: Keyboard.WillChangeFrameNotification, object: nil, using: { [weak self] (notify) in
             guard var self = self else { return }
+            guard self.isRespondToKeyboard else { return }
+            
             if let keyboardBounds = notify.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect {
                 self.keyboardFrame = keyboardBounds
             }
