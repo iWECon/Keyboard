@@ -9,33 +9,38 @@ import UIKit
 
 public protocol KeyboardNotifiable {
     
-    /// 键盘 frame
     var keyboardFrame: CGRect { get set }
     
-    /// 键盘是否正在显示
+    /// Indicates whether the keyboard displays
     var isKeyboardShowing: Bool { get }
     
-    /// 激活键盘出现/消失的监听，一般用在 viewDidLoad 中即可
+    /// Activate keyboard pop-up and disappearance listeners
+    /// It is usually placed in `viewDidLoad` or `init`
     func activatingKeyboardNotifiable()
     
-    /// 键盘 frame 发生改变时，实现内容已包含在动画块中
-    /// - Parameters:
-    ///   - isVisiable: true：键盘将要出现，false 键盘将要消失
-    ///   - targetFrame: 出现/消失时键盘的 frame
+    /// Agents that pop up or disappear from the keyboard
+    /// Included in the animation block
     func keyboardWillChangeFrameWithAnimation(_ isVisiable: Bool, _ targetFrame: CGRect)
     
-    /// 键盘将要显示，实现内容已包含在动画块中
-    /// - Parameter targetFrame: 键盘目标 frame
-    func keyboardWillShow(_ targetFrame: CGRect)
+    // Triggered at the end of the animation where the keyboard appears or disappears
+    // without animation
+    func keyboardDidChangeFrame(_ isVisiable: Bool, _ targetFrame: CGRect)
     
-    /// 键盘将要隐藏，实现内容已包含在动画块中
-    /// - Parameter targetFrame: 键盘目标 frame
+    // The following separate methods are split up and included in the animation block
+    func keyboardWillShow(_ targetFrame: CGRect)
     func keyboardWillHide(_ targetFrame: CGRect)
     
+    // Triggered at the end of the animation where the keyboard appears or disappears
+    func keyboardDidShow(_ targetedFrame: CGRect)
+    func keyboardDidHidden(_ targetedFrame: CGRect)
 }
 
 public extension KeyboardNotifiable {
     func keyboardWillChangeFrameWithAnimation(_ isVisiable: Bool, _ targetFrame: CGRect) { }
     func keyboardWillShow(_ targetFrame: CGRect) { }
     func keyboardWillHide(_ targetFrame: CGRect) { }
+    
+    func keyboardDidChangeFrame(_ isVisiable: Bool, _ targetFrame: CGRect) { }
+    func keyboardDidShow(_ targetedFrame: CGRect) { }
+    func keyboardDidHidden(_ targetedFrame: CGRect) { }
 }
